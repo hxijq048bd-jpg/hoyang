@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1613">
+<meta property="og:title" content="何陽 檔案">
+<meta property="og:description" content="1980, 九龍城寨. 12년째 한 사람을 찾고 있는 남자.">
+<title>何陽 檔案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: 1980 구룡성채 지하. 비 내리는 어두운 벽, 네온 간판 아래 붙은 종이 문서들. 인트로 → 간판 점등 → 문서 열람. */
+:root{
+  --night:#1b1613; --wall:#251e19; --wall-2:#2f2620;
+  --paper:#e9ddc2; --paper-2:#ddcfae; --ink:#2b221c; --ink-soft:#6b5a4a;
+  --fg:#ece2d0; --muted:#a8988a;
+  --red:#c63b2e; --mint:#9cc7b4; --lime:#c2c86e;
+  --f-han:"Noto Serif TC","Songti TC",serif;
+  --f-body:"Gowun Batang","Nanum Myeongjo","Apple SD Gothic Neo",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--night)}
+body{color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.75;overflow-x:hidden}
+#rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.glow{position:fixed;left:0;right:0;top:0;height:46vh;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 70% at 30% 0%,rgba(198,59,46,.16),transparent 70%),radial-gradient(ellipse 40% 50% at 85% 10%,rgba(156,199,180,.07),transparent 70%)}
+.wrap{position:relative;z-index:1;max-width:780px;margin:0 auto;padding-block:28px 80px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+
+/* ---------- INTRO ---------- */
+#intro{position:fixed;inset:0;z-index:50;background:var(--night);display:grid;place-items:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));
+  transition:opacity 1.2s ease, visibility 1.2s}
+#intro.out{opacity:0;visibility:hidden}
+.intro-in{display:grid;gap:14px;max-width:34ch;width:100%}
+.il{opacity:0;transform:translateY(8px);transition:opacity 1.1s ease,transform 1.1s ease;font-size:17px;color:var(--muted)}
+.il.on{opacity:1;transform:none}
+.il.year{font-family:var(--f-mono);font-size:13px;letter-spacing:.4em;color:var(--red)}
+.il.big{font-family:var(--f-han);font-weight:900;font-size:clamp(40px,11vw,64px);color:var(--fg);letter-spacing:.1em;line-height:1.1}
+.il.last{color:var(--fg)}
+.enter-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{font:inherit;font-family:var(--f-han);font-weight:700;font-size:16px;letter-spacing:.12em;cursor:pointer;
+  background:transparent;color:var(--red);border:1px solid var(--red);padding:10px 20px;border-radius:2px;
+  transition:background .25s,color .25s}
+.btn:hover{background:var(--red);color:var(--night)}
+.btn.ghost{color:var(--muted);border-color:var(--wall-2);font-family:var(--f-mono);font-weight:400;font-size:12px}
+.btn.ghost:hover{background:var(--wall-2);color:var(--fg)}
+.btn:focus-visible,.snd:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.hint{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.1em}
+
+/* ---------- HEADER ---------- */
+header{display:grid;gap:6px;margin-bottom:22px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.sign{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.sign h1{font-family:var(--f-han);font-weight:900;font-size:clamp(44px,12vw,76px);line-height:1;margin:0;color:var(--red);
+  text-shadow:0 0 6px rgba(198,59,46,.6),0 0 22px rgba(198,59,46,.45),0 0 48px rgba(198,59,46,.25)}
+body.lit .sign h1{animation:neon 2.4s steps(1) 1, hum 6s ease-in-out 2.4s infinite}
+@keyframes neon{0%{opacity:.08;text-shadow:none}8%{opacity:1}11%{opacity:.1;text-shadow:none}19%{opacity:.9}23%{opacity:.15;text-shadow:none}40%{opacity:1}43%{opacity:.4}46%,100%{opacity:1}}
+@keyframes hum{0%,100%{opacity:1}47%{opacity:1}48%{opacity:.72}49%{opacity:1}}
+.sign span{font-family:var(--f-han);font-size:20px;color:var(--fg);letter-spacing:.1em}
+.stripe{height:6px;width:120px;background:linear-gradient(90deg,var(--paper-2) 0 33%,var(--lime) 33% 66%,var(--paper-2) 66%);border-radius:1px}
+.lede{color:var(--muted);font-size:14px;max-width:60ch;margin:6px 0 0}
+
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}
+nav a{display:flex;flex-direction:column;align-items:center;min-width:74px;padding:8px 12px 7px;border:1px solid var(--wall-2);
+  background:var(--wall);color:var(--muted);text-decoration:none;border-radius:2px;transition:color .2s,border-color .2s,transform .2s}
+nav a b{font-family:var(--f-han);font-size:19px;letter-spacing:.06em;line-height:1.3}
+nav a small{font-size:11px;font-family:var(--f-mono);letter-spacing:.08em}
+nav a:hover{color:var(--fg);transform:translateY(-2px)}
+nav a[aria-current="page"]{color:var(--red);border-color:var(--red);box-shadow:inset 0 -3px 0 var(--red),0 0 16px rgba(198,59,46,.25)}
+nav a:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+/* ---------- DOCUMENTS ---------- */
+section{display:grid;gap:18px}
+.paper{background:var(--paper);color:var(--ink);padding:26px 22px;border-radius:1px;position:relative;min-width:0;
+  box-shadow:0 10px 24px rgba(0,0,0,.45);background-image:radial-gradient(circle at 80% 10%,rgba(120,90,50,.12),transparent 40%),radial-gradient(circle at 10% 90%,rgba(120,90,50,.15),transparent 45%)}
+.paper.tilt{--r:-.6deg;transform:rotate(var(--r))}
+.paper.tilt2{--r:.5deg;transform:rotate(var(--r))}
+.paper{--r:0deg}
+.tape{position:absolute;top:-10px;left:50%;width:90px;height:22px;margin-left:-45px;background:rgba(220,210,170,.55);transform:rotate(-3deg)}
+.note{color:var(--fg);max-width:62ch}
+.note p{margin:0 0 .9em}
+.note em{font-style:normal;color:var(--mint)}
+h2{font-family:var(--f-han);font-weight:900;margin:0;line-height:1.1;text-wrap:balance}
+.stamp{display:inline-block;font-family:var(--f-han);font-weight:900;color:var(--red);border:3px solid var(--red);padding:2px 10px;
+  transform:rotate(-8deg);opacity:.85;letter-spacing:.1em}
+.mono{font-family:var(--f-mono);font-size:13px}
+.label{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+
+.poster h2{font-size:clamp(48px,14vw,84px);text-align:center;letter-spacing:.12em}
+.photo{width:120px;aspect-ratio:3/4;max-width:100%;background:repeating-linear-gradient(45deg,var(--paper-2) 0 6px,#d3c39f 6px 12px);
+  border:1px solid var(--ink-soft);display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;color:var(--ink-soft);text-align:center}
+.poster-body{display:grid;grid-template-columns:auto 1fr;gap:18px;margin-top:16px;align-items:start}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+dt{font-family:var(--f-han);font-weight:700}
+dd{margin:0;min-width:0}
+.phones{margin-top:16px;border-top:1px dashed var(--ink-soft);padding-top:10px;display:grid;gap:2px}
+.phones s{color:var(--ink-soft)}
+@media (max-width:440px){.poster-body{grid-template-columns:1fr}.photo{width:100px}}
+
+.log{display:grid}
+.log-row{display:grid;grid-template-columns:5.5em 1fr;gap:12px;padding:10px 0;border-bottom:1px solid rgba(43,34,28,.18)}
+.log-row:last-child{border-bottom:0}
+.log-row .d{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);padding-top:3px}
+.log-row .t{min-width:0}
+.log-row .gauge{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft)}
+.log-row.hand .t{font-size:17px}
+.log-row.last .t{color:var(--red);font-weight:700}
+
+.tbl{overflow-x:auto;margin:0 -4px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-align:left;color:var(--ink-soft);font-weight:500;padding:6px 8px;border-bottom:2px solid var(--ink)}
+th.n{text-align:right}
+td{padding:8px;border-bottom:1px solid rgba(43,34,28,.18);vertical-align:top}
+td.n{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.neg{color:var(--red)}
+td.age{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+td.memo{font-size:13px;color:var(--ink-soft)}
+tr.phase td{font-family:var(--f-han);font-weight:700;font-size:13px;letter-spacing:.08em;background:rgba(43,34,28,.07);color:var(--ink);border-bottom:0;padding-top:10px}
+tr.total td{border-top:2px solid var(--ink);border-bottom:0;font-weight:700}
+.sub{margin-top:26px}
+.callout{margin-top:18px;border:2px solid var(--red);padding:12px 14px;display:grid;gap:4px}
+.callout .big{font-family:var(--f-mono);font-size:clamp(20px,6vw,30px);font-weight:500;color:var(--red);font-variant-numeric:tabular-nums}
+
+.form{display:grid;gap:10px}
+.field{display:grid;grid-template-columns:7em 1fr;gap:10px;border-bottom:1px solid rgba(43,34,28,.2);padding-bottom:8px}
+.field .v{min-width:0}
+.redact{background:var(--ink);color:var(--ink);border-radius:1px;padding:0 4px;user-select:none}
+
+footer{margin-top:40px;font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.1em}
+
+/* sound toggle */
+.snd{position:fixed;z-index:40;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--muted);
+  background:rgba(37,30,25,.85);border:1px solid var(--wall-2);padding:8px 12px;border-radius:2px;cursor:pointer;backdrop-filter:blur(4px)}
+.snd .bars{display:flex;gap:2px;align-items:flex-end;height:12px}
+.snd .bars i{width:2px;background:var(--red);height:30%}
+.snd.on{color:var(--fg);border-color:var(--red)}
+.snd.on .bars i{animation:eq .9s ease-in-out infinite}
+.snd.on .bars i:nth-child(2){animation-delay:.2s}.snd.on .bars i:nth-child(3){animation-delay:.45s}.snd.on .bars i:nth-child(4){animation-delay:.1s}
+@keyframes eq{0%,100%{height:25%}50%{height:100%}}
+
+/* ---------- MOTION ---------- */
+@media (prefers-reduced-motion:no-preference){
+  body.lit .reveal{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  section.play .paper{animation:drop .7s cubic-bezier(.2,.8,.25,1) both}
+  @keyframes drop{from{opacity:0;transform:translateY(-26px) rotate(calc(var(--r) - 3deg))}to{opacity:1;transform:rotate(var(--r))}}
+  section.play .tape{animation:tape .4s .45s both}
+  @keyframes tape{from{opacity:0;transform:rotate(-3deg) scaleX(.3)}to{opacity:1;transform:rotate(-3deg)}}
+  section.play .note p{animation:rise .8s both;animation-delay:calc(.5s + var(--i,0)*.18s)}
+  section.play .seq{animation:line .5s both;animation-delay:calc(.35s + var(--i,0)*var(--step,.07s))}
+  @keyframes line{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+  section.play .log .seq{--step:.32s}
+  section.play .log-row.last .t{animation:last 1.6s both;animation-delay:calc(.35s + var(--i,0)*.32s)}
+  @keyframes last{0%{opacity:0;letter-spacing:.4em}100%{opacity:1;letter-spacing:0}}
+  section.play .stamp{animation:stamp .35s cubic-bezier(.3,1.6,.5,1) 1.1s both}
+  @keyframes stamp{from{opacity:0;transform:rotate(-8deg) scale(2.6)}to{opacity:.85;transform:rotate(-8deg) scale(1)}}
+  section.play .redact{animation:ink .6s .9s both}
+  @keyframes ink{from{background:transparent;color:var(--ink)}to{background:var(--ink);color:var(--ink)}}
+  section.play .phones s{text-decoration:none;background:linear-gradient(var(--ink-soft),var(--ink-soft)) no-repeat 0 55%/0 1px;animation:strike .5s both;animation-delay:calc(1s + var(--i,0)*.35s)}
+  @keyframes strike{to{background-size:100% 1px}}
+  section.play .callout{animation:pulse 1.2s 2.2s both}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(198,59,46,.5)}100%{box-shadow:0 0 0 14px rgba(198,59,46,0)}}
+}
+@media (prefers-reduced-motion:reduce){ .il{transition:none} #intro{transition:none} }
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow reveal" style="--d:.1s">1980 · 九龍城寨 第七棟 地下 · 非公開記錄</div>
+    <div class="sign reveal" style="--d:.2s"><h1>何陽</h1><span>호양 · 38</span></div>
+    <div class="stripe reveal" style="--d:.5s" aria-hidden="true"></div>
+    <p class="lede reveal" style="--d:.7s">성채 수금원 호양에 대해 아무도 모르는 것들. 그가 성채에 오기 전의 기록만 모았다.</p>
+  </header>
+
+  <nav class="reveal" style="--d:.9s" aria-label="문서 목록">
+    <a href="#notice"><b>尋人</b><small>실종 전단</small></a>
+    <a href="#logbook"><b>日誌</b><small>출장 일지</small></a>
+    <a href="#ledger"><b>借據</b><small>빚 장부</small></a>
+    <a href="#stairs"><b>事故</b><small>첫 일</small></a>
+  </nav>
+
+  <!-- 尋人啓事 -->
+  <section id="notice">
+    <div class="paper tilt poster">
+      <div class="tape" aria-hidden="true"></div>
+      <h2>尋人啓事</h2>
+      <div class="poster-body">
+        <div class="photo">사진<br>(빛바램)</div>
+        <dl>
+          <dt>姓名</dt><dd>何月 · 호월</dd>
+          <dt>年齡</dt><dd>실종 당시 14세 · 1968년 여름</dd>
+          <dt>關係</dt><dd>형, 何陽이 찾음</dd>
+          <dt>最後</dt><dd>부두 3번 창고 근처에서 목격</dd>
+          <dt>特徵</dt><dd>마른 체격. 노래를 흥얼거리는 버릇.</dd>
+          <dt>酬謝</dt><dd>소식 주시면 사례 HK$5,000</dd>
+        </dl>
+      </div>
+      <div class="phones mono">
+        <span class="label">連絡處</span>
+        <s>永光電器 修理技術部 · 何主任</s>
+        <s>마카오 여관 202호</s>
+        <s>부두 노무자 숙소 3층</s>
+        <span>성채 7동 공중전화 · 밤 9시 이후</span>
+      </div>
+    </div>
+    <div class="note">
+      <p>12년 전부터 부두 게시판에 붙어 있던 전단이다. 연락처는 네 번 바뀌었다. 회사 전화, 여관, 노무자 숙소, 그리고 성채 공중전화. 앞의 세 줄은 호양이 직접 줄을 그어 지웠다. 그 줄 순서가 곧 호양이 떨어져 내려온 순서다.</p>
+      <p>호양에게는 열두 살 어린 동생이 있었다. 어머니가 돌아가신 뒤로는 사실상 호양이 키웠다. 학비를 대고, 도시락을 싸고, 밤마다 우는 걸 달랬다. 지금도 아이 울음소리가 들리면 그날은 돈을 받지 않고 돌아간다.</p>
+      <p>지갑 안쪽에 열네 살 동생 사진을 넣고 다닌다. 지금쯤이면 스물여섯. 얼굴이 많이 변했을 것이다.</p>
+    </div>
+  </section>
+
+  <!-- 出張日誌 -->
+  <section id="logbook" hidden>
+    <div class="paper tilt2">
+      <div class="label">1968 · 出張日誌 · 永光電器 修理技術部 主任 何陽</div>
+      <div class="log" style="margin-top:12px">
+        <div class="log-row hand seq"><div class="d">出張 前</div><div class="t">“다녀올게. 금방 올게.” 月이 문 앞까지 나옴. 도시락 두고 감.</div></div>
+        <div class="log-row seq"><div class="d">第 3 日</div><div class="t">싱가포르 주롱 신공장 도착. 조립 라인 3개 전원부 점검.<div class="gauge">입력 230V / 50Hz · 접지 저항 4Ω · 이상 없음</div></div></div>
+        <div class="log-row seq"><div class="d">第 17 日</div><div class="t">트랜지스터 라디오 튜너 불량. 납땜 지그 직접 개조.<div class="gauge">불량률 7.2% → 1.9%</div></div></div>
+        <div class="log-row seq"><div class="d">第 29 日</div><div class="t">공장 사무실 국제전화. 月 안 받음. 학교 행사 갔겠지.</div></div>
+        <div class="log-row seq"><div class="d">第 36 日</div><div class="t">현지 기술자 교육 종료. 일정 일주일 연장 요청받음. 수락.</div></div>
+        <div class="log-row seq"><div class="d">第 44 日</div><div class="t">귀국. 공항에서 바로 집.</div></div>
+        <div class="log-row last seq"><div class="d">—</div><div class="t">집 비어 있음.</div></div>
+      </div>
+    </div>
+    <div class="note">
+      <p>호양의 원래 직업은 가전 회사 <em>永光電器의 수리기술부 주임</em>이었다. 넥타이를 매고 출근했고, 공장 라인이 멈추면 제일 먼저 불려 가는 사람이었다. 지금도 고장 난 라디오나 선풍기를 눈 감고도 고치는 건 그래서다.</p>
+      <p>이 일지는 귀국한 날에서 끝난다. 연장을 수락한 일주일. 호양은 그 일주일을 아직도 센다.</p>
+      <p>“다녀올게, 금방 올게.” 약속을 어긴 건 호양 자신이었다. 그래서 남이 약속을 어기는 걸 유난히 못 참는다.</p>
+    </div>
+  </section>
+
+  <!-- 借據 -->
+  <section id="ledger" hidden>
+    <div class="paper">
+      <div class="label">借據 · 何陽 명의 · 단위 HK$</div>
+      <h2 style="font-size:28px;margin:8px 0 14px">동생 찾는 데 쓴 돈</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>연도 · 나이</th><th>항목</th><th class="n">입출금</th><th class="n">수중</th><th>비고</th></tr></thead>
+          <tbody class="rows">
+            <tr class="phase"><td colspan="5">一 · 회사를 그만두다</td></tr>
+            <tr><td class="age">1968 · 26</td><td>퇴직금</td><td class="n">+6,000</td><td class="n">6,000</td><td class="memo">주임 승진 1년 차. 월급 1,500</td></tr>
+            <tr><td class="age">1968 · 26</td><td>예금 전액 인출</td><td class="n">+24,000</td><td class="n">30,000</td><td class="memo">月 대학 학비로 모으던 돈</td></tr>
+            <tr><td class="age">1968 · 26</td><td>사설 탐정 사무소 3곳</td><td class="n neg">−4,800</td><td class="n">25,200</td><td class="memo">한 곳은 한 달 뒤 폐업</td></tr>
+            <tr><td class="age">1968 · 26</td><td>신문 심인 광고 6개월</td><td class="n neg">−900</td><td class="n">24,300</td><td class="memo">華僑日報 외 2곳</td></tr>
+            <tr><td class="age">1969 · 27</td><td>마카오 정보원 “목격 정보”</td><td class="n neg">−3,500</td><td class="n">20,800</td><td class="memo">사기</td></tr>
+            <tr><td class="age">1969 · 27</td><td>“경찰 내부 기록” 브로커</td><td class="n neg">−4,000</td><td class="n">16,800</td><td class="memo">사기. 서류 위조</td></tr>
+            <tr><td class="age">1969 · 27</td><td>지룽·가오슝 “비슷한 아이” 확인</td><td class="n neg">−3,800</td><td class="n">13,000</td><td class="memo">다른 아이였음</td></tr>
+
+            <tr class="phase"><td colspan="5">二 · 빌리기 시작하다</td></tr>
+            <tr><td class="age">1970 · 28</td><td>은행 신용대출</td><td class="n">+10,000</td><td class="n">23,000</td><td class="memo">연 12%. 전 직장 재직증명으로</td></tr>
+            <tr><td class="age">1970 · 28</td><td>“인신매매 선박 명단” 구입</td><td class="n neg">−8,000</td><td class="n">15,000</td><td class="memo">사기. 명단에 이름 없음</td></tr>
+            <tr><td class="age">1971 · 29</td><td>아파트 매각 (주택대출 상환 후)</td><td class="n">+68,000</td><td class="n">83,000</td><td class="memo">月의 방은 그대로였음</td></tr>
+            <tr><td class="age">1971 · 29</td><td>마닐라·방콕·싱가포르 항구 수색</td><td class="n neg">−26,000</td><td class="n">57,000</td><td class="memo">8개월</td></tr>
+            <tr><td class="age">1971 · 29</td><td>가짜 납치범 몸값 요구</td><td class="n neg">−35,000</td><td class="n">22,000</td><td class="memo">전화 한 통. 돈만 사라짐</td></tr>
+            <tr><td class="age">1971–72</td><td>정보료·뇌물·체류비</td><td class="n neg">−20,000</td><td class="n">2,000</td><td class="memo"></td></tr>
+
+            <tr class="phase"><td colspan="5">三 · 부두로 내려가다</td></tr>
+            <tr><td class="age">1972 · 30</td><td>야우마테이 사금융 차용</td><td class="n">+15,000</td><td class="n">17,000</td><td class="memo">월 5푼</td></tr>
+            <tr><td class="age">1972 · 30</td><td>선원 명부 열람 뇌물</td><td class="n neg">−6,000</td><td class="n">11,000</td><td class="memo">부두 3번 창고 출입 선박</td></tr>
+            <tr><td class="age">1972 · 30</td><td>은행·사금융 이자</td><td class="n neg">−8,000</td><td class="n">3,000</td><td class="memo">은행 연체 시작</td></tr>
+            <tr><td class="age">1973 · 31</td><td>부두 하역 인부 취업</td><td class="n">—</td><td class="n">3,000</td><td class="memo">월급 450. 예전 월급의 3분의 1도 안 됨</td></tr>
+            <tr><td class="age">1973 · 31</td><td>성채 고리대 차용</td><td class="n">+25,000</td><td class="n">28,000</td><td class="memo">월 1할. 사금융 독촉 막으려고</td></tr>
+            <tr><td class="age">1973 · 31</td><td>사금융 일부 상환</td><td class="n neg">−12,000</td><td class="n">16,000</td><td class="memo"></td></tr>
+            <tr><td class="age">1973–74</td><td>십장·선원·창고지기 정보 매수</td><td class="n neg">−14,000</td><td class="n">2,000</td><td class="memo">“그 무렵 애 하나 봤다”</td></tr>
+            <tr><td class="age">1973–75</td><td>인부 월급 전액 이자로</td><td class="n neg">−2,000</td><td class="n">0</td><td class="memo">2년간 원금 한 푼도 못 갚음</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="label">負債 · 1975년, 33세 시점</div>
+        <div class="tbl" style="margin-top:8px">
+          <table>
+            <thead><tr><th>채권자</th><th class="n">원금</th><th>조건</th><th class="n">잔액</th><th>비고</th></tr></thead>
+            <tbody>
+              <tr><td>은행 신용대출</td><td class="n">10,000</td><td class="memo">연 12% · 연체</td><td class="n">15,000</td><td class="memo">채권 매각됨</td></tr>
+              <tr><td>야우마테이 사금융</td><td class="n">15,000</td><td class="memo">월 5푼</td><td class="n">21,000</td><td class="memo">채권 매각됨</td></tr>
+              <tr><td>성채 고리대</td><td class="n">25,000</td><td class="memo">월 1할 · 복리</td><td class="n">74,000</td><td class="memo"></td></tr>
+              <tr class="total"><td>합계</td><td class="n">50,000</td><td></td><td class="n neg">110,000</td><td class="memo">세 장 모두 같은 조직 손에</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <span class="label">성채 고리대 이자 · 한 달치</span>
+          <span class="big" id="interest" data-to="7400">≈ 7,400</span>
+          <span class="mono">하역 인부 월급 450. 한 달 이자가 월급 16개월치였다.<br>빚 총액은 그가 팔았던 아파트 한 채 반 값.</span>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <p>회사를 그만두고, 예금을 깨고, 집을 팔았다. 정보를 판다는 사람들에게 돈을 쥐여주다 몇 번이나 속았고, 가짜 몸값 전화 한 통에 집값의 절반이 사라졌다. 은행에서 빌리고, 사금융에서 빌리고, 마지막엔 성채 안의 돈까지 빌렸다. 집과 저축을 합쳐 십만 가까운 돈이 있었다. 7년 뒤 남은 건 십일만의 빚이었다.</p>
+      <p>하역 인부가 된 건 돈 때문이 아니었다. 동생이 마지막으로 목격된 곳이 부두였다. 짐을 나르고, 선원들과 담배를 나눠 피우고, 창고지기와 술을 마셨다. 혹시나 흔적이 남아 있을까, 누가 소식이라도 들었을까 싶어서였다. 넥타이 매던 손으로 하루 열두 시간 짐을 졌다.</p>
+      <p>흩어져 있던 빚 세 장은 어느새 한 조직이 전부 사들여 쥐고 있었다. 그 조직이 제안했다. 몸으로 갚으라고.</p>
+      <p>호양이 그 제안을 받아들인 진짜 이유는 빚이 아니다. 삼합회 정보망이라면 동생을 찾을 수 있을지도 모른다고 계산했다. 성채 구석구석을 수금하러 다니는 일은, 성채 구석구석을 뒤질 수 있는 일이기도 하다.</p>
+      <p><em>수금하러 들어가는 집마다 동생의 흔적부터 찾는다.</em></p>
+    </div>
+  </section>
+
+  <!-- 事故 -->
+  <section id="stairs" hidden>
+    <div class="paper tilt">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap">
+        <div><div class="label">內部報告 · 收數</div><h2 style="font-size:28px;margin-top:6px">첫 해결 건</h2></div>
+        <span class="stamp">結案</span>
+      </div>
+      <div class="form" style="margin-top:16px">
+        <div class="field seq"><span class="label">담당</span><span class="v">何陽 (신입)</span></div>
+        <div class="field seq"><span class="label">대상</span><span class="v"><span class="redact">陳某某某</span> · 4개월 연체</span></div>
+        <div class="field seq"><span class="label">장소</span><span class="v">성채 4동 ~ 5동 사이 연결 계단</span></div>
+        <div class="field seq"><span class="label">경과</span><span class="v">대상 도주. 계단에서 실족. 何陽은 신체 접촉 없음.</span></div>
+        <div class="field seq"><span class="label">처리</span><span class="v">회수 불가. 장부 정리.</span></div>
+      </div>
+    </div>
+    <div class="note">
+      <p>조직에 들어와 맡은 첫 일. 빚쟁이가 도망치다 성채의 좁은 계단에서 굴러떨어졌다. 호양은 손도 대지 않았지만, 바로 뒤에서 쫓던 게 자신이었다.</p>
+      <p>보고서에는 다섯 줄로 끝났다. 호양에게는 끝나지 않았다. 몇 달 전까지 자기도 쫓기던 쪽이었으니까.</p>
+      <p>그 뒤로 도망치는 사람은 쫓지 않는다. 대신 그 사람이 돌아올 곳에서 기다린다. 늘 느긋해 보이는 건 그래서다. 그리고 계단을 싫어한다.</p>
+    </div>
+  </section>
+
+  <footer>何陽 · 前 永光電器 主任 · 前 碼頭苦力 · 現 收數</footer>
+</div>
+
+<button class="snd" id="snd" type="button" aria-pressed="false" hidden><span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sndlabel">音 OFF</span></button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- RAIN ---------- */
+  var cv=document.getElementById('rain'), cx=cv.getContext('2d'), W=0,H=0,drops=[],splash=[];
+  function size(){var r=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;cx.setTransform(r,0,0,r,0,0);
+    var n=Math.round(W*H/7000);drops=[];for(var i=0;i<n;i++)drops.push(nd(true));}
+  function nd(any){return{x:Math.random()*W*1.2,y:any?Math.random()*H:-20,l:8+Math.random()*16,v:7+Math.random()*7,a:.08+Math.random()*.22,red:Math.random()<.12}}
+  function frame(){cx.clearRect(0,0,W,H);
+    for(var i=0;i<drops.length;i++){var d=drops[i];
+      cx.strokeStyle=d.red?'rgba(198,59,46,'+d.a+')':'rgba(156,199,180,'+d.a+')';cx.lineWidth=1;
+      cx.beginPath();cx.moveTo(d.x,d.y);cx.lineTo(d.x-d.l*.18,d.y+d.l);cx.stroke();
+      d.y+=d.v;d.x-=d.v*.18;
+      if(d.y>H){if(Math.random()<.3)splash.push({x:d.x,y:H-2,r:0,a:.25});drops[i]=nd(false);}}
+    for(var j=splash.length-1;j>=0;j--){var s=splash[j];cx.strokeStyle='rgba(156,199,180,'+s.a+')';cx.beginPath();cx.ellipse(s.x,s.y,s.r,s.r*.3,0,0,Math.PI*2);cx.stroke();s.r+=.8;s.a-=.02;if(s.a<=0)splash.splice(j,1);}
+    requestAnimationFrame(frame);}
+  if(!reduce){size();addEventListener('resize',size);requestAnimationFrame(frame);}
+
+  /* ---------- AUDIO (Web Audio로 직접 연주) ---------- */
+  var ac=null, master=null, wet=null, on=false, nextT=0, step=0, timer=null;
+  var BEAT=.78;
+  var NOTES={'-2':220.0,'-1':246.94,0:293.66,1:329.63,2:369.99,3:440.0,4:493.88,5:587.33,6:659.25,7:739.99};
+  // 광둥풍 5음계(D 궁조) 선율. [음, 박]
+  var TUNE=[[4,1],[3,.5],[2,.5],[1,1],[0,2],[null,1],
+            [2,1],[3,.5],[4,.5],[5,1.5],[4,.5],[3,2],[null,1],
+            [5,.5],[6,.5],[5,1],[4,.5],[3,.5],[2,1],[3,2.5],[null,1],
+            [1,1],[2,.5],[1,.5],[0,1],[-1,1],[0,3],[null,2],
+            [3,1],[5,1],[4,.5],[3,.5],[2,1],[1,.5],[2,.5],[3,3],[null,1],
+            [2,.5],[1,.5],[0,1],[-1,.5],[-2,.5],[-1,1],[0,4],[null,3]];
+  function noiseBuf(){var len=ac.sampleRate*2,b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<len;i++)d[i]=Math.random()*2-1;return b;}
+  function pluck(f,t,vel,len){
+    var o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain(),g2=ac.createGain(),lp=ac.createBiquadFilter();
+    o.type='triangle';o.frequency.value=f;o2.type='square';o2.frequency.value=f*2;g2.gain.value=.12;
+    var lfo=ac.createOscillator(),lg=ac.createGain();lfo.frequency.value=5.2;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(f*.008,t+.35);
+    lfo.connect(lg);lg.connect(o.frequency);lg.connect(o2.frequency);
+    lp.type='lowpass';lp.frequency.setValueAtTime(3200,t);lp.frequency.exponentialRampToValueAtTime(700,t+.6);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel,t+.006);g.gain.exponentialRampToValueAtTime(.0008,t+len);
+    o.connect(lp);o2.connect(g2);g2.connect(lp);lp.connect(g);g.connect(master);g.connect(wet);
+    [o,o2,lfo].forEach(function(x){x.start(t);x.stop(t+len+.05);});
+  }
+  function schedule(){
+    while(nextT<ac.currentTime+.6){
+      var n=TUNE[step%TUNE.length],dur=n[1]*BEAT;
+      if(n[0]!==null){var f=NOTES[n[0]];
+        pluck(f,nextT,.13,Math.min(2.4,dur+.6));
+        if(n[1]>=2){ for(var k=1;k<7;k++) pluck(f,nextT+.35+k*.085,.05*(1-k/8),.3); } // 輪指(트레몰로)
+      }
+      nextT+=dur;step++;
+    }
+  }
+  function drip(){ if(!ac)return; var t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine';o.frequency.setValueAtTime(1500+Math.random()*900,t);o.frequency.exponentialRampToValueAtTime(420,t+.09);
+    g.gain.setValueAtTime(.07,t);g.gain.exponentialRampToValueAtTime(.0005,t+.14);o.connect(g);g.connect(master);g.connect(wet);o.start(t);o.stop(t+.16);
+    setTimeout(drip,1200+Math.random()*3500);}
+  function startAudio(){
+    try{ac=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return false;}
+    master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+    var dl=ac.createDelay(1),fb=ac.createGain(),wg=ac.createGain();dl.delayTime.value=.43;fb.gain.value=.34;wg.gain.value=.32;
+    wet=ac.createGain();wet.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(wg);wg.connect(master);
+    var nb=noiseBuf();
+    var r1=ac.createBufferSource();r1.buffer=nb;r1.loop=true;var bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1400;bp.Q.value=.5;var rg=ac.createGain();rg.gain.value=.055;r1.connect(bp);bp.connect(rg);rg.connect(master);r1.start();
+    var r2=ac.createBufferSource();r2.buffer=nb;r2.loop=true;r2.playbackRate.value=.7;var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=380;var rg2=ac.createGain();rg2.gain.value=.09;r2.connect(lp);lp.connect(rg2);rg2.connect(master);r2.start();
+    var hum=ac.createOscillator();hum.type='sawtooth';hum.frequency.value=100;var hl=ac.createBiquadFilter();hl.type='lowpass';hl.frequency.value=260;var hg=ac.createGain();hg.gain.value=.012;hum.connect(hl);hl.connect(hg);hg.connect(master);hum.start();
+    var dr=ac.createOscillator();dr.type='sine';dr.frequency.value=73.42;var dg=ac.createGain();dg.gain.value=.05;var dlfo=ac.createOscillator(),dlg=ac.createGain();dlfo.frequency.value=.07;dlg.gain.value=.025;dlfo.connect(dlg);dlg.connect(dg.gain);dr.connect(dg);dg.connect(master);dr.start();dlfo.start();
+    nextT=ac.currentTime+1.8;step=0;timer=setInterval(schedule,120);
+    setTimeout(drip,2000);
+    return true;
+  }
+  var sndBtn=document.getElementById('snd'),sndLabel=document.getElementById('sndlabel');
+  function setSound(v){
+    on=v; if(!ac && v){ if(!startAudio()){return;} }
+    if(ac){ if(ac.state==='suspended')ac.resume(); var t=ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(v?.9:0,t+(v?2.5:.6)); }
+    sndBtn.classList.toggle('on',v);sndBtn.setAttribute('aria-pressed',v?'true':'false');sndLabel.textContent=v?'音 ON':'音 OFF';
+  }
+  sndBtn.addEventListener('click',function(){setSound(!on);});
+  function sfx(kind){ if(!ac||!on)return; var t=ac.currentTime;
+    if(kind==='paper'){var s=ac.createBufferSource();s.buffer=noiseBuf();var hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=2200;var g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.06,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.28);s.connect(hp);hp.connect(g);g.connect(master);s.start(t);s.stop(t+.3);}
+    if(kind==='stamp'){var o=ac.createOscillator(),g2=ac.createGain();o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(40,t+.18);g2.gain.setValueAtTime(.35,t);g2.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g2);g2.connect(master);o.start(t);o.stop(t+.3);}
+  }
+
+  /* ---------- TABS ---------- */
+  var ids=["notice","logbook","ledger","stairs"];
+  document.querySelectorAll('section').forEach(function(sec){
+    sec.querySelectorAll('.seq').forEach(function(el,i){el.style.setProperty('--i',i);});
+    sec.querySelectorAll('.rows tr').forEach(function(el,i){el.classList.add('seq');el.style.setProperty('--i',i);});
+    sec.querySelectorAll('.note p').forEach(function(el,i){el.style.setProperty('--i',i);});
+    sec.querySelectorAll('.phones s').forEach(function(el,i){el.style.setProperty('--i',i);});
+  });
+  var started=false;
+  function countUp(el){ if(reduce)return; var to=+el.dataset.to,t0=null; el.textContent='≈ 0';
+    setTimeout(function(){ requestAnimationFrame(function tick(ts){ if(!t0)t0=ts; var p=Math.min(1,(ts-t0)/1400),e=1-Math.pow(1-p,3);
+      el.textContent='≈ '+Math.round(to*e).toLocaleString('en-US'); if(p<1)requestAnimationFrame(tick); }); },1800); }
+  function show(withSfx){
+    var h=(location.hash||"").slice(1); if(ids.indexOf(h)<0) h="notice";
+    ids.forEach(function(id){ var s=document.getElementById(id); s.hidden = id!==h; s.classList.remove('play'); });
+    var cur=document.getElementById(h); if(started){ void cur.offsetWidth; cur.classList.add('play'); }
+    document.querySelectorAll("nav a").forEach(function(a){
+      if(a.getAttribute("href")==="#"+h) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+    if(started && withSfx) sfx('paper');
+    if(started && h==='stairs' && !reduce) setTimeout(function(){sfx('stamp');},1150);
+    if(started && h==='ledger') countUp(document.getElementById('interest'));
+  }
+  addEventListener("hashchange",function(){show(true);scrollTo(0,0);});
+  show(false);
+
+  /* ---------- INTRO ---------- */
+  var lines=[["year","1980"],["","홍콩의 화려한 야경 뒤편."],["big","九龍城寨"],["","철거 통보가 내려온 해."],["","이 미로 안에서 12년째"],["last","한 사람을 찾고 있는 남자가 있다."]];
+  var intro=document.createElement('div');intro.id='intro';
+  var inner='<div class="intro-in">';
+  lines.forEach(function(l){inner+='<div class="il '+l[0]+'">'+l[1]+'</div>';});
+  inner+='<div class="il enter-row"><button class="btn" id="go" type="button">기록 열람</button><button class="btn ghost" id="quiet" type="button">소리 없이</button></div>';
+  inner+='<div class="il hint">배경음이 재생됩니다 · 오른쪽 아래에서 끌 수 있어요</div></div>';
+  intro.innerHTML=inner;document.body.appendChild(intro);
+  document.body.style.overflow='hidden';
+  var ils=intro.querySelectorAll('.il');
+  ils.forEach(function(el,i){setTimeout(function(){el.classList.add('on');},reduce?0:400+i*900);});
+  function enter(sound){
+    intro.classList.add('out');document.body.style.overflow='';sndBtn.hidden=false;
+    if(sound)setSound(true);
+    setTimeout(function(){ document.body.classList.add('lit'); started=true; show(false); },reduce?0:500);
+    setTimeout(function(){intro.remove();},1400);
+  }
+  document.getElementById('go').addEventListener('click',function(){enter(true);});
+  document.getElementById('quiet').addEventListener('click',function(){enter(false);});
+})();
+</script>
+
+</body>
+</html>
